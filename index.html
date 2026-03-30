@@ -54,7 +54,7 @@ button {
 <div class="container" id="loginBox">
   <h2>Login</h2>
   <input id="username" placeholder="Gebruikersnaam">
-  <input id="password" type="password" placeholder="Wachtwoord">
+  <input id="password" type="password" placeholder="Wachtwoord" onkeydown="checkLoginEnter(event)">
   <button onclick="login()">Login</button>
 <p id="errorMessage"></p>
 </div>
@@ -70,18 +70,34 @@ function login() {
   let user = document.getElementById("username").value;
   let pass = document.getElementById("password").value;
 
-if (user === "admin" && pass === "1234") {
-  document.getElementById("errorMessage").textContent = "";
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-} else {
-  document.getElementById("errorMessage").textContent = "Verkeerde gebruikersnaam of wachtwoord.";
+  if (user === "admin" && pass === "1234") {
+    document.getElementById("errorMessage").textContent = "";
+localStorage.setItem("loggedIn", "true");
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+  } else {
+    document.getElementById("errorMessage").textContent = "Verkeerde gebruikersnaam of wachtwoord.";
+  }
 }
 
 function logout() {
+  localStorage.removeItem("loggedIn");
   document.getElementById("loginBox").style.display = "block";
   document.getElementById("dashboard").style.display = "none";
 }
+function checkLoginEnter(event) {
+  if (event.key === "Enter") {
+    login();
+  }
+}
+function checkLoginStatus() {
+  if (localStorage.getItem("loggedIn") === "true") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+  }
+}
+
+window.onload = checkLoginStatus;
 </script>
 
 </body>
